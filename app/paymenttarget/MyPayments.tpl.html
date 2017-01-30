@@ -1,0 +1,38 @@
+﻿<div ng-controller="MyPaymentsCtrl">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2">
+                <div id="tree"></div>
+            </div>
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-default" ng-click="ImportPTI()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                <table class="table table-condensed table-bordered table-hover table-responsive table-striped">
+                    <tr class="row">
+                        <td><a href="" ng-click="predicate = 'Id'; reverse=false">Идентификатор</a></td>
+                        <td><a href="" ng-click="predicate = 'Icon'; reverse=!reverse">Иконка</a></td>
+                        <td><a href="" ng-click="predicate = 'CategoryName'; reverse=!reverse">Категория на терминале</a></td>
+                        <td><a href="" ng-click="predicate = 'DisplayName'; reverse=!reverse">Наименование</a></td>                        
+                        <td><a href="" ng-click="predicate = 'ContragentName'; reverse=!reverse">Контрагент</a></td>
+                        <td><a href="" ng-click="predicate = 'ContragentEDRPOU'; reverse=!reverse">ЕДРПОУ</a></td>
+                        <td><a href="" ng-click="predicate = 'BankMFO'; reverse=!reverse">МФО</a></td>
+                        <td><a href="" ng-click="predicate = 'BankName'; reverse=!reverse">Банк</a></td>
+                        <td><a href="" ng-click="predicate = 'ContragentAccount'; reverse=!reverse">Р/С</a></td>
+                        <td></td>
+                    </tr>
+                    <tr class="row" ng-repeat="pti in ptis | orderBy:predicate:reverse">
+                        <td>{{pti.Id}}</td>
+                        <td><img src="/icons.ashx?pti={{pti.Id}}"></td>                                                
+                        <td>{{pti.CategoryName}}</td>
+                        <td>{{pti.DisplayName}}</td>
+                        <td>{{pti.ContragentName}}</td>
+                        <td>{{pti.ContragentEDRPOU}}</td>
+                        <td>{{pti.BankMFO}}</td>
+                        <td>{{pti.BankName}}</td>                        
+                        <td>{{pti.ContragentAccount}}</td>                                                
+                        <td><button type="button" class="btn btn-default" ng-click="EditPti(pti)"><span class="glyphicon glyphicon-edit"></span></button></td>
+                    </tr>
+                </table> 
+            </div>
+        </div>
+    </div>
+</div>

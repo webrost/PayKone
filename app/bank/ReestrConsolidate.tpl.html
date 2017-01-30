@@ -1,0 +1,115 @@
+﻿<div ng-controller="ReestrConsolidateCtrl">
+    <div class="modalPanel" ng-show="showSaveComplete">
+        <div class="modalDialog">
+            <div class="well">
+                <div>Сохранение реестра {{current.reestrName}} на дату {{current.reestrDate}} завершено!</div>
+                <div class="btn btn-default" ng-click="showSaveComplete = false;">Ok</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+       <div class="row">
+           <div class="col-lg-3">
+               <input kendo-date-time-picker k-ng-model="startDate" data-k-format="'dd.MM.yyyy HH:mm'" />
+           </div>
+           <div class="col-lg-3">
+               <input kendo-date-time-picker k-ng-model="endDate" data-k-format="'dd.MM.yyyy HH:mm'" />
+           </div>
+           <div class="col-lg-2">
+               <button class="btn btn-primary" ng-click="LoadReestrs()">Применить</button>
+           </div>
+       </div>
+        <div class="row">
+            <div class="well">
+                <table class="table-bordered table-condensed table-responsive" width="100%">
+                    <thead>
+                        <tr>
+                            <td>Экспорт</td>
+                            <td><a href="" ng-click="predicate = 'ReestrName'; reverse=!reverse">Имя реестра</a></td>
+                            <td><a href="" ng-click="predicate = 'Date'; reverse=!reverse">Дата</a></td>
+                            <td><a href="" ng-click="predicate = 'Summ'; reverse=!reverse">Сумма</a></td>
+                            <td><a href="" ng-click="predicate = 'PTKS'; reverse=!reverse">Внешняя комиссия</a></td>
+                            <td><a href="" ng-click="predicate = 'AgentProfit'; reverse=!reverse">Часть агента</a></td>
+                            <td><a href="" ng-click="predicate = 'BankProfit'; reverse=!reverse">Часть банка</a></td>
+                            <td><a href="" ng-click="predicate = 'BankComission'; reverse=!reverse">Внутренняя комиссия</a></td>
+                            <td><a href="" ng-click="predicate = 'AgentProfitFromComission'; reverse=!reverse">Часть агента</a></td>
+                            <td><a href="" ng-click="predicate = 'BankProfitFromComission'; reverse=!reverse">Часть банка</a></td>
+                            <td><a href="" ng-click="predicate = 'BankProfitFromComission'; reverse=!reverse">Имя файла</a></td>
+                            <td><a href="" ng-click="predicate = 'BankProfitFromComission'; reverse=!reverse">Дата выгрузки</a></td>
+                            <td><a href="" ng-click="predicate = 'BankProfitFromComission'; reverse=!reverse"></a></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>{{reestrs.sum('Summ') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('PTKS') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('AgentProfit') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('BankProfit') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('BankComission') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('AgentProfitFromComission') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('BankProfitFromComission') | number:2}}</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="reestr in reestrs | orderBy:predicate:reverse"
+                            ng-click="LoadTransactions(reestr)" ng-class="{'selectedRow': reestr.$$hashKey == current.reestr.$$hashKey}" style="cursor:pointer;">
+                            <td><button type="button" popover-trigger="mouseenter" popover="Сохранение файла реестра {{reestr.ReestrName}} на FTP для Хрещатика" class="btn btn-default" ng-click="ExportReestr(reestr.ReestrName, reestr.Date)"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button></td>
+                            <td>{{reestr.ReestrName}}</td>
+                            <td>{{reestr.Date | date:"dd.MM.yyyy HH:mm:ss"}}</td>
+                            <td>{{reestr.Summ | number:2}}</td>
+                            <td>{{reestr.PTKS | number:2}}</td>
+                            <td>{{reestr.AgentProfit | number:2}}</td>
+                            <td>{{reestr.BankProfit | number:2}}</td>
+                            <td>{{reestr.BankComission | number:2}}</td>
+                            <td>{{reestr.AgentProfitFromComission | number:2}}</td>
+                            <td>{{reestr.BankProfitFromComission | number:2}}</td>
+                            <td>{{reestr.FileName}}</td>
+                            <td>{{reestr.FileCreated}}</td>
+                            <td><button type="button" ng-show="reestr.FileName !='Нет'" popover-trigger="mouseenter" popover="Удаление файла {{reestr.FileName}} с FTP сервера для Хрещатика." class="btn btn-default" ng-click="DeleteFile(reestr)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="well">
+                <h4>Транзакции в реестре {{current.reestr.ReestrName}}</h4>
+                <button type="button" popover-trigger="mouseenter" popover="Удаление транзакции из реестра" class="btn btn-default" ng-click="ExcludeTransaction(transaction)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                <table class="table-bordered table-condensed table-hover table-responsive table-striped" width="100%">
+                    <tr>
+                        <td></td>
+                        <td><a href="" ng-click="predicate = 'Id'; reverse=!reverse">#</a></td>
+                        <td><a href="" ng-click="predicate = 'ReestrName'; reverse=!reverse">Имя реестра</a></td>
+                        <td><a href="" ng-click="predicate = 'Descr'; reverse=!reverse">Назначение</a></td>
+                        <td><a href="" ng-click="predicate = 'Summ'; reverse=!reverse">Сумма</a></td>
+                        <td><a href="" ng-click="predicate = 'PTKS'; reverse=!reverse">Внешняя комиссия</a></td>
+                        <td><a href="" ng-click="predicate = 'AgentProfit'; reverse=!reverse">Часть агента</a></td>
+                        <td><a href="" ng-click="predicate = 'BankProfit'; reverse=!reverse">Часть банка</a></td>
+                        <td><a href="" ng-click="predicate = 'BankComission'; reverse=!reverse">Внутренняя комиссия</a></td>
+                        <td><a href="" ng-click="predicate = 'AgentProfitFromComission'; reverse=!reverse">Часть агента</a></td>
+                        <td><a href="" ng-click="predicate = 'BankProfitFromComission'; reverse=!reverse">Часть банка</a></td>
+                    </tr>
+                    <tr ng-repeat="transaction in transactions | orderBy:predicate:reverse" style="cursor:pointer;">
+                        <td><input type="checkbox" id="cb_{{transaction.Id}}" ng-click="Check($event, transaction.Id)" /></td>
+                        <td>{{transaction.Id}}</td>
+                        <td>{{transaction.ReestrName}}</td>
+                        <td>{{transaction.Descr}}</td>
+                        <td>{{transaction.Summ | number:2}}</td>
+                        <td>{{transaction.PTKS | number:2}}</td>
+                        <td>{{transaction.AgentProfit | number:2}}</td>
+                        <td>{{transaction.BankProfit | number:2}}</td>
+                        <td>{{transaction.BankComission | number:2}}</td>
+                        <td>{{transaction.AgentProfitFromComission | number:2}}</td>
+                        <td>{{transaction.BankProfitFromComission | number:2}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

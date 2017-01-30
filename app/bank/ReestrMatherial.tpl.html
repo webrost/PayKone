@@ -1,0 +1,108 @@
+﻿<div ng-controller="ReestrMatherialCtrl">
+    <div class="modalPanel" ng-show="showBuildComplete">
+        <div class="modalDialog">
+            <div class="well">
+                <div>Построение реестра {{current.reestrName}} на дату {{current.reestrDate}} завершено!</div>
+                <div class="btn btn-default" ng-click="showBuildComplete = false;">Ok</div>                
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="row">
+                <div class="col-lg-12">
+                    Транзакции не в реестрах на 
+                    <input kendo-date-time-picker k-ng-model="reestrViewDate" data-k-format="'dd.MM.yyyy HH:mm'" />
+                    <button class="btn btn-primary" ng-click="ViewReestr()">Применить</button>
+                    <div class="btn btn-danger" ng-click="FixCommissionDistribution()">FIX: Перераспределить комиссии</div>
+                </div>
+            </div>
+            <div class="well" >
+                <table class="table-bordered table-condensed table-responsive" width="100%">
+                        <tr>
+                            <td></td>
+                            <td>Имя реестра</td>
+                            <td>Сумма</td>
+                            <td>Сумма внешней комиссии</td>
+                            <td>Агент</td>
+                            <td>Банк</td>
+                            <td>Внутренняя</td>
+                            <td>Агент</td>
+                            <td>Банк</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><b>{{reestrs.sum('Summ') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('SummCommission') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('SummCommissionAgentExternal') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('SummCommissionBankExternal') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('SummCommissionInternal') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('SummCommissionAgentInternal') | number:2}}</b></td>
+                            <td><b>{{reestrs.sum('SummCommissionBankInternal') | number:2}}</b></td>
+                        </tr>
+                        <tr class="reestrRow" ng-repeat="reestr in reestrs" ng-click="LoadTransactions(reestr)" ng-class="{'selectedRow': reestr.ReestrName == current.reestr.ReestrName}" style="cursor:pointer;">
+                            <td><button popover-trigger="mouseenter" popover="Построить реестр {{reestr.ReestrName}}" type="button" class="btn btn-default" ng-click="BuildReestr(reestr.ReestrName)" popover-><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span></button></td>
+                            <td>{{reestr.ReestrName}}</td>
+                            <td>{{reestr.Summ | number:2}}</td>
+                            <td>{{reestr.SummCommission | number:2}}</td>
+                            <td>{{reestr.SummCommissionAgentExternal | number:2}}</td>
+                            <td>{{reestr.SummCommissionBankExternal | number:2}}</td>
+                            <td>{{reestr.SummCommissionInternal | number:2}}</td>
+                            <td>{{reestr.SummCommissionAgentInternal | number:2}}</td>
+                            <td>{{reestr.SummCommissionBankInternal | number:2}}</td>
+                        </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="well">
+                <h4>Транзакции в реестре {{current.reestr.ReestrName}}</h4>
+                <table class="table-bordered table-condensed table-hover table-responsive table-striped">
+                    <tr>
+                        <td><a href="" ng-click="predicate = 'TransactionId'; reverse=!reverse">Id</a></td>
+                        <td><a href="" ng-click="predicate = 'PaymentTargetName'; reverse=!reverse">Наименование платежа</a></td>
+                        <td><a href="" ng-click="predicate = 'Summ'; reverse=!reverse">Сумма</a></td>
+                        <td><a href="" ng-click="predicate = 'SummCommission'; reverse=!reverse">Сумма комиссии</a></td>
+                        <td><a href="" ng-click="predicate = 'SummCommissionAgentExternal'; reverse=!reverse">Агент</a></td>
+                        <td><a href="" ng-click="predicate = 'SummCommissionBankExternal'; reverse=!reverse">Банк</a></td>
+                        <td><a href="" ng-click="predicate = 'SummCommissionInternal'; reverse=!reverse">Внутренняя</a></td>
+                        <td><a href="" ng-click="predicate = 'SummCommissionAgentInternal'; reverse=!reverse">Агент</a></td>
+                        <td><a href="" ng-click="predicate = 'SummCommissionBankInternal'; reverse=!reverse">Банк</a></td>
+                        <td><a href="" ng-click="predicate = 'TransactDate'; reverse=!reverse">Дата транзакции</a></td>
+                        <td><a href="" ng-click="predicate = 'Name'; reverse=!reverse">Контрагент</a></td>
+                        <td><a href="" ng-click="predicate = 'OKPO'; reverse=!reverse">ОКПО</a></td>
+                        <td><a href="" ng-click="predicate = 'MFO'; reverse=!reverse">МФО</a></td>
+                        <td><a href="" ng-click="predicate = 'RS'; reverse=!reverse">РС</a></td>
+                        <td><a href="" ng-click="predicate = 'Desc'; reverse=!reverse">Назначение</a></td>
+                        <td><a href="" ng-click="predicate = 'Dog'; reverse=!reverse">Договор</a></td>
+                        <td><a href="" ng-click="predicate = 'TerminalId'; reverse=!reverse">Терминал</a></td>
+                        <td><a href="" ng-click="predicate = 'PaymentTargetId'; reverse=!reverse">Код платежа</a></td>
+                    </tr>
+                    <tr ng-repeat="transaction in transactions | orderBy:predicate:reverse">
+                        <td>{{transaction.TransactionId}}</td>
+                        <td>{{transaction.PaymentTargetName}}</td>
+                        <td>{{transaction.Summ | number:2}}</td>
+                        <td>{{transaction.SummCommission | number:2}}</td>
+                        <td>{{transaction.SummCommissionAgentExternal | number:2}}</td>
+                        <td>{{transaction.SummCommissionBankExternal | number:2}}</td>
+                        <td>{{transaction.SummCommissionInternal | number:2}}</td>
+                        <td>{{transaction.SummCommissionAgentInternal | number:2}}</td>
+                        <td>{{transaction.SummCommissionBankInternal | number:2}}</td>
+                        <td>{{transaction.TransactDate | date:"dd.MM.yyyy HH:mm:ss"}}</td>
+                        <td>{{transaction.Name}}</td>
+                        <td>{{transaction.OKPO}}</td>
+                        <td>{{transaction.MFO}}</td>
+                        <td>{{transaction.RS}}</td>
+                        <td>{{transaction.Desc}}</td>
+                        <td>{{transaction.Dog}}</td>
+                        <td>{{transaction.TerminalId}}</td>
+                        <td>{{transaction.PaymentTargetId}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

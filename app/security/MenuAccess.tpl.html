@@ -1,0 +1,32 @@
+﻿<div ng-controller="MenuAccessCtrl">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="list-group">
+                    <a class="list-group-item" style="cursor: pointer;" ng-repeat="role in roles"  ng-click="LoadMenus(role)"
+                       ng-class="IsActiveRole(role.Id)"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;{{role.Name}}</a>
+                </div>
+
+            </div>
+            
+            <div class="col-sm-10">
+                <table class="table table-bordered table-condensed table-hover table-responsive table-striped">
+                    <tr ng-repeat="menu in menus">
+                        <td>
+                            <input type="checkbox" ng-model="menu.Enabled" ng-change="UpdateMenuAccess(menu)">
+                            &nbsp;{{menu.Name}}
+                            <table class="table table-bordered table-condensed table-hover table-responsive table-striped">
+                                <tr ng-repeat="child in menu.Children">
+                                    <td>
+                                        <input type="checkbox" ng-model="child.Enabled" ng-change="UpdateMenuAccess(child)">
+                                        &nbsp;{{child.Name}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+        </div>
+    </div>
+</div>

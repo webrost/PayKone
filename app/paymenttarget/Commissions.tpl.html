@@ -1,0 +1,41 @@
+﻿<div ng-controller="CommissionsCtrl">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <select ng-model="source" ng-change="LoadCommissions()">
+                    <option value="External">Внешняя комиссия</option>
+                    <option value="InternalBank">Внутрення комисиия банка в пользу ПС</option>
+                    <option value="InternalFLash">Внутренняя комиссия ПС в пользу банка</option>
+                </select>
+                <button type="button" class="btn btn-default" ng-click="NewCommission"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                <table class="table table-condensed table-bordered table-hover table-responsive table-striped">
+                    <tr class="row">
+                        <td><a href="" ng-click="predicate = 'Id'; reverse=false">Id</a></td>
+                        <td><a href="" ng-click="predicate = 'ExternalServiceId'; reverse=!reverse">Номер сервиса</a></td>
+                        <td><a href="" ng-click="predicate = 'PaymentName'; reverse=!reverse">Наименование</a></td>
+                        <td><a href="" ng-click="predicate = 'MinValue'; reverse=!reverse">От</a></td>
+                        <td><a href="" ng-click="predicate = 'MaxValue'; reverse=!reverse">До</a></td>
+                        <td><a href="" ng-click="predicate = 'CommissionValue'; reverse=!reverse">Значение</a></td>
+                        <td><a href="" ng-click="predicate = 'IsPercent'; reverse=!reverse">%</a></td>
+                        <td><a href="" ng-click="predicate = 'Description'; reverse=!reverse">Описание</a></td>
+                        <td></td>
+                    </tr>
+                    <tr class="row" ng-repeat="commission in commissions | orderBy:predicate:reverse"
+                        ng-dblclick="EditCommission(commission)">
+                        <td>{{commission.Id}}</td>
+                        <td>{{commission.ExternalServiceId}}</td>
+                        <td>{{commission.PaymentName}}</td>
+                        <td>{{commission.MinValue}}</td>
+                        <td>{{commission.MaxValue}}</td>
+                        <td>{{commission.CommissionValue}}</td>
+                        <td>{{commission.IsPercent}}</td>
+                        <td>{{commission.Description}}</td>
+                        <td>
+                            <button type="button" class="btn btn-default" ng-click="DeleteCommission(commission)"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                        </td>
+                    </tr>
+                </table> 
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+﻿<form name="CommissionForm" novalidate>
+    <div class="modal-header">
+        <h3 class="modal-title">Комиссия</h3>
+    </div>
+    <div class="modal-body">
+        <table class="table table-striped">
+            <tr>
+                <td colspan="4">
+                    Внутренний код: <h3>{{commission.Id}}</h3>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    Наименование: <h3>{{commission.ExternalServiceId}}: {{commission.PaymentName}}</h3>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    Описание: <input name="Description" class="form-control" type="text" required ng-model="commission.Description" />
+                </td>
+            </tr>
+            <tr>
+                <td>От</td>
+                <td>До</td>
+                <td>Значение</td>
+                <td>%</td>
+            </tr>
+            <tr>
+                <td>
+                    <input name="MinValue" class="form-control" type="number" required ng-model="commission.MinValue" />
+                    <span class="error" ng-show="CommissionForm.MinValue.$error.required">
+                        *
+                    </span>
+                </td>
+                <td>
+                    <input name="MaxValue" class="form-control" type="number" required ng-model="commission.MaxValue" />
+                    <span class="error" ng-show="CommissionForm.MaxValue.$error.required">
+                        *
+                    </span>
+                </td>
+                <td>
+                    <input name="CommissionValue" class="form-control" type="number" required ng-model="commission.CommissionValue" />
+                    <span class="error" ng-show="CommissionForm.CommissionValue.$error.required">
+                        *
+                    </span>
+                </td>
+                <td>
+                    <input type="checkbox" ng-model="commission.IsPercent" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()" ng-disabled="BoxForm.$invalid">Сохранить</button>
+        <button class="btn btn-warning" ng-click="cancel()">Отменить</button>
+    </div>
+</form>

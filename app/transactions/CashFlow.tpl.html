@@ -1,0 +1,48 @@
+﻿<div ng-controller="CashFlowCtrl">
+    <div class="well">
+        Текущий терминал: {{currentTerminal.Name}}
+    </div>
+    <form class="form-inline" role="form">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Терминал" ng-model="currentTerminal"
+                   typeahead="terminal as (terminal.Name + terminal.Address) for terminal in getTerminals($viewValue)" typeahead-on-select="CheckTerminalSelection()"
+                   typeahead-loading="loadingTerminals" class="form-control" select-on-click>
+            <i ng-show="loadingTerminals" class="glyphicon glyphicon-refresh"></i>
+        </div>
+        <div class="form-group">
+            c
+        </div>
+        <div class="form-group">
+            <input kendo-date-time-picker k-ng-model="startDate" data-k-format="'dd.MM.yyyy HH:mm'" />
+        </div>
+        <div class="form-group">
+            по
+        </div>
+        <div class="form-group">
+            <input kendo-date-time-picker k-ng-model="endDate" data-k-format="'dd.MM.yyyy HH:mm'" />
+        </div>
+        <button type="submit" ng-click="getCashFlow()" class="btn btn-primary" ng-disabled="!EnableFilter">Фильтр</button>
+    </form>
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <td><a href="" ng-click="predicate = 'CashInDate'; reverse=false">Время</a></td>
+            <td><a href="" ng-click="predicate = 'Summ'; reverse=!reverse">Сумма</a></td>
+            <td><a href="" ng-click="predicate = 'Purpose'; reverse=!reverse">Назначение платежа</a></td>
+            <td><a href="" ng-click="predicate = 'TransactionId'; reverse=!reverse">Транзакция</a></td>
+        </tr>
+        <tr>
+            <td><b>Итого:</b></td>
+            <td><b>{{totalSumm | number:2}} грн. ({{totalCount}} купюр.)</b></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr ng-repeat="cashFlow in cashFlows | orderBy:predicate:reverse"
+            ng-class="{selectedRow: current.cashFlow == cashFlow}" style="cursor: pointer;">
+            <td>{{cashFlow.CashInDate}}</td>
+            <td>{{cashFlow.Nominal | number:2}} грн.</td>
+            <td>{{cashFlow.Purpose}}</td>
+            <td>{{cashFlow.TransactionId}}</td>
+        </tr>
+    </table>
+</div>

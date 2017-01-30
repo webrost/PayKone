@@ -1,0 +1,23 @@
+﻿<div ng-controller="TerminalGroupsCtrl">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4">
+                <div id="tree"></div>
+            </div>
+
+            <div class="col-sm-8">
+                <button type="button" class="btn btn-default" ng-click="NewGroup()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                <button type="button" class="btn btn-default" ng-click="DeleteGroup()" ng-disabled="!AllowDelete()"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                <div class="bg-danger" ng-show="!AllowDelete()">Удаление невозможно так как не выбрана группа или она содержит терминалы</div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label for="groupName">Наименование группы</label>
+                        <input class="form-control" id="groupName" ng-model="current.group.text" />
+                        <div class="btn btn-default" ng-click="SaveGroup()" ng-if="current.group.id">Сохранить</div>
+                        <div class="btn btn-default" ng-click="AddGroup()" ng-if="!current.group.id">Добавить</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

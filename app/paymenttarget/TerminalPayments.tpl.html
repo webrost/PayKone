@@ -1,0 +1,60 @@
+﻿<div ng-controller="TerminalPaymentsCtrl" style="height: 100%">
+    <div class="modalPanel" ng-show="showCheckAll">
+        <div class="modalDialog">
+            <div class="well">                
+                <div ng-show="CheckedAction == 'All'">Данное действие приведет к отображению всех сервисов группы на терминале.</div>
+                <div ng-show="CheckedAction == 'None'">Данное действие приведет к удалению всех сервисов группы на терминале.</div>
+                <div>Вы уверены, что хотите продолжить?</div>
+                <div class="btn btn-default" ng-click="showCheckAll = false; CheckUncheckAction();">Да</div>
+                <div class="btn btn-default" ng-click="showCheckAll = false;">Нет</div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" style="height: 100%">
+        <div class="well">
+            Текущий терминал: <span>{{current.terminal.Name}}</span>
+        </div>
+        <div class="col-sm-2 dsp">
+            <div style="cursor:pointer;">
+                <table class="table table-condensed table-bordered table-hover table-responsive table-striped">
+                    <tr class="row">
+                        <td><a href="" ng-click="predicate1 = 'Id'; reverse=false">Номер</a></td>
+                        <td><a href="" ng-click="predicate1 = 'Address'; reverse=false">Адрес</a></td>
+                    </tr>
+                    <tr class="row" ng-repeat="terminal in terminals | orderBy:predicate1:reverse" ng-click="SelectTerminal(terminal)">
+                        <td>{{terminal.Id}}</td>
+                        <td>{{terminal.Address}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-2 dsp">
+            <div id="tree"></div>
+        </div>
+        <div class="col-sm-8 dsp">
+            <table class="table table-condensed table-bordered table-responsive" style="cursor: pointer;">
+                <thead>
+                    <tr class="row">
+                        <td>
+                            <div class="btn btn-default" ng-click="CheckedAction='All';showCheckAll = true;">Выделить все</div>
+                            <div class="btn btn-default" ng-click="CheckedAction='None';showCheckAll = true;">Снять все</div>
+                        </td>
+                        <td><a href="" ng-click="predicate = 'Id'; reverse=false">Идентификатор</a></td>
+                        <td><a href="" ng-click="predicate = 'Icon'; reverse=!reverse">Иконка</a></td>
+                        <td><a href="" ng-click="predicate = 'CategoryName'; reverse=!reverse">Категория на терминале</a></td>
+                        <td><a href="" ng-click="predicate = 'DisplayName'; reverse=!reverse">Наименование</a></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="row" ng-repeat="pti in ptis | orderBy:predicate:reverse" ng-class="GetPaymentClass(pti)">
+                        <td><input type="checkbox" id="PTICheckBox_{{pti.Id}}" ng-model="pti.Checked" ng-click="SelectPayment(pti)" /></td>
+                        <td>{{pti.Id}}</td>
+                        <td><img src="/icons.ashx?pti={{pti.Id}}" ng-class="GetPaymentImageClass(pti)"></td>
+                        <td>{{pti.CategoryName}}</td>
+                        <td>{{pti.DisplayName}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+﻿<div ng-controller="MyTerminalsCtrl">
+    <div class="modalPanel" ng-show="showEditPanel">
+        <div class="modalDialog">
+            <div class="well">
+                <div class="form">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label for="terminalName">Имя терминала</label>
+                            <input type="text" class="form-control" placeholder="Имя терминала" id="terminalName" ng-model="current.terminal.Name" disabled="disabled" />
+                            <label for="terminalAddress">Адрес</label>
+                            <input type="text" class="form-control" placeholder="Адрес" id="terminalAddress" ng-model="current.terminal.Address" />
+                            <label for="terminalComputerName">FQDN имя</label>
+                            <input type="text" class="form-control" placeholder="FQDN имя" id="terminalComputerName" ng-model="current.terminal.ComputerName" />
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="terminalConfigPassword">Пароль конфигурации</label>
+                            <input type="text" class="form-control" placeholder="Пароль конфигурации" id="terminalConfigPassword" ng-model="current.terminal.ConfigPassword" />
+                            <label for="terminalInstallationCode">Код инсталляции</label><div class="btn glyphicon glyphicon-refresh"></div>
+                            <input type="text" class="form-control" placeholder="Код инсталляции" id="terminalInstallationCode" ng-model="current.terminal.InstallationCode" />
+                            <label for="terminalGroup">Группа терминалов</label>
+                            <select id="terminalGroup" name="terminalGroup" class="form-control" ng-model="current.terminal.GroupId">
+                                <option value="{{group.id}}" ng-repeat="group in terminalGroups">{{group.text}}</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4"></div>
+                    </div>
+                </div>
+                <div class="btn btn-default" ng-click="SaveTerminal()">Сохранить</div>
+                <div class="btn btn-default" ng-click="CloseEditor()">Отменить</div>
+            </div>
+        </div>
+    </div>
+    <div class="modalPanel" ng-show="showDeleteWarning">
+        <div class="modalDialog">
+            <div class="well">
+                <div>Вы уверены в том, что хотите удалить терминал {{current.terminal.Name}}</div>
+                <div class="btn btn-default" ng-click="DeleteTerminal()">Удалить</div>
+                <div class="btn btn-default" ng-click="CloseDeletePanel()">Отменить</div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2">
+                <div id="tree"></div>
+            </div>
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-default" ng-click="AddTerminal()" ng-disabled="!current.group.id"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                <table class="table table-condensed table-bordered table-hover table-responsive table-striped">
+                    <tr class="row">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><a href="" ng-click="predicate = 'Name'; reverse=false">Наименование</a></td>
+                        <td><a href="" ng-click="predicate = 'ComputerName'; reverse=!reverse">Полное имя</a></td>
+                        <td><a href="" ng-click="predicate = 'Address'; reverse=!reverse">Адрес</a></td>
+                        <td><a href="" ng-click="predicate = 'IpAddress'; reverse=!reverse">IP</a></td>
+                        <td><a href="" ng-click="predicate = 'LastKeepAliveMessage'; reverse=!reverse">Время последней связи</a></td>
+                        <td><a href="" ng-click="predicate = 'AppVersion'; reverse=!reverse">Версия приложения</a></td>
+                        <td></td>
+                    </tr>
+                    <tr class="row" ng-class="{success:terminal.Status == 'Online',warning:terminal.Status == 'Offline'}" ng-dblclick="EditTerminal(terminal)" ng-repeat="terminal in terminals | orderBy:predicate:reverse">
+                        <td><img src="/Images/web.png" style="cursor:pointer" ng-click="goWeb(terminal.Id)" /> </td>
+                        <td><img src="/Images/rdp.png" style="cursor:pointer" ng-click="goRdp(terminal.ComputerName)" /> </td>
+                        <td><img src="/Images/ssh.png" style="cursor:pointer" ng-click="goSsh(terminal.ComputerName)" /> </td>
+                        <td>{{terminal.Name}}</td>
+                        <td>{{terminal.ComputerName}}</td>
+                        <td>{{terminal.Address}}</td>
+                        <td>{{terminal.IpAddress}}</td>
+                        <td>{{terminal.LastKeepAliveMessage | date:"dd.MM.yyyy hh:mm:ss"}}</td>
+                        <td>{{terminal.AppVersion}}</td>
+                        <td><button type="button" class="btn btn-default" ng-click="DeleteTerminalPanel(terminal)"><span class="glyphicon glyphicon-trash"></span></button></td>
+                    </tr>
+                </table> 
+            </div>
+        </div>
+    </div>
+</div>

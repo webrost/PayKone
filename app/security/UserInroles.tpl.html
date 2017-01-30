@@ -1,0 +1,76 @@
+﻿<div ng-controller="UserInRolesCtrl">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="list-group">
+                    <a class="list-group-item">
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#AddModal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#DeleteConfirmModal"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                    </a>
+
+                    <a class="list-group-item" style="cursor: pointer;" ng-repeat="user in users" ng-click="LoadRoles(user)" ng-class="IsActiveUser(user)">
+                        <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                        &nbsp;&nbsp;&nbsp;{{user.Name}}
+                    </a>
+                </div>
+
+            </div>
+            
+            <div class="col-sm-8">
+                <table class="table table-bordered table-condensed table-hover table-responsive table-striped">
+                    <tr ng-repeat="role in roles">
+                        <td>
+                            <input type="checkbox" ng-model="role.Enabled" />
+                            &nbsp;{{role.Name}}
+                        </td>
+                    </tr>
+                </table>
+                </div>
+
+
+            <!-- Add Modal -->
+            <div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Добавление пользователя</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form novalidate name="">
+                                <div class="form-group">
+                                    <label for="userName" class="control-label">Пользователь:</label>
+                                    <input type="text" class="form-control" id="userName" ng-model="newuser" ng-required>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                            <button type="button" class="btn btn-primary" ng-click="AddNewUser()">Сохранить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Confirm Modal -->
+            <div class="modal fade" id="DeleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Удаление пользователя</h4>
+                        </div>
+                        <div class="modal-body">
+                            Вы уверены что хотите удалить пользователя {{current.user.Name}}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                            <button type="button" class="btn btn-primary" >Удалить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

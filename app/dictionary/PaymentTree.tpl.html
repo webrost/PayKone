@@ -1,0 +1,24 @@
+﻿<div ng-controller="PaymentTreeCtrl">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4">
+                <div id="tree"></div>
+            </div>
+
+            <div class="col-sm-8">
+                <button type="button" class="btn btn-default" ng-click="NewGroup()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                <button ng-if="HasSelectedGroup" type="button" class="btn btn-default" ng-click="DeleteGroup()" ng-disabled="!AllowDelete()"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                <div class="bg-danger" ng-show="!AllowDelete() && HasSelectedGroup">Удаление невозможно так как не выбрана группа или она содержит терминалы</div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label for="groupName" ng-if="current.group.id && HasSelectedGroup">Измените группы</label>
+                        <label for="groupName" ng-if="!current.group.id">Введите наименование новой группы</label>
+                        <input class="form-control" id="groupName" ng-model="current.group.text" />
+                        <div class="btn btn-default" ng-click="SaveGroup()" ng-if="current.group.id && HasSelectedGroup">Сохранить</div>
+                        <div class="btn btn-default" ng-click="AddGroup()" ng-if="!current.group.id">Добавить</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

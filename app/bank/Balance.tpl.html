@@ -1,0 +1,57 @@
+﻿<div ng-controller="BalanceCtrl">
+    <div class="well">
+        <H3>Касса терминалов</H3>
+        <div>Отображаются только терминалы доступные для пользователя</div>
+    </div>
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <td><a href="" ng-click="predicate = 'TerminalId'; reverse=!reverse">Номер</a></td>
+            <td><a href="" ng-click="predicate = 'TerminalName'; reverse=!reverse">Терминал</a></td>
+            <td><a href="" ng-click="predicate = 'TerminalAddress'; reverse=!reverse">Адрес</a></td>
+            <td><a href="" ng-click="predicate = 'Cash1'; reverse=!reverse">1</a></td>
+            <td><a href="" ng-click="predicate = 'Cash2'; reverse=!reverse">2</a></td>
+            <td><a href="" ng-click="predicate = 'Cash5'; reverse=!reverse">5</a></td>
+            <td><a href="" ng-click="predicate = 'Cash10'; reverse=!reverse">10</a></td>
+            <td><a href="" ng-click="predicate = 'Cash20'; reverse=!reverse">20</a></td>
+            <td><a href="" ng-click="predicate = 'Cash50'; reverse=!reverse">50</a></td>
+            <td><a href="" ng-click="predicate = 'Cash100'; reverse=!reverse">100</a></td>
+            <td><a href="" ng-click="predicate = 'Cash200'; reverse=!reverse">200</a></td>
+            <td><a href="" ng-click="predicate = 'Cash500'; reverse=!reverse">500</a></td>
+            <td><a href="" ng-click="predicate = 'AllCount'; reverse=!reverse">Всего</a></td>
+            <td><a href="" ng-click="predicate = 'Summ'; reverse=!reverse">Сумма</a></td>
+        </tr>
+        <tr style="background-color:#ceeaff">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>{{current.count | number:0}}</b></td>
+            <td><b>{{current.summ | number:0}}</b></td>
+        </tr>
+
+        <tr ng-repeat="record in records | orderBy:predicate:reverse"
+            style="cursor: pointer;" ng-click="current.incassation = incassation;">           
+            <td>{{record.TerminalId}}</td>
+            <td>{{record.TerminalName}}</td>
+            <td>{{record.TerminalAddress}}</td>
+            <td>{{record.Cash1 | number:0}}</td>
+            <td>{{record.Cash2 | number:0}}</td>
+            <td>{{record.Cash5 | number:0}}</td>
+            <td>{{record.Cash10 | number:0}}</td>
+            <td>{{record.Cash20 | number:0}}</td>
+            <td>{{record.Cash50 | number:0}}</td>
+            <td>{{record.Cash100 | number:0}}</td>
+            <td>{{record.Cash200 | number:0}}</td>
+            <td>{{record.Cash500 | number:0}}</td>
+            <td>{{record.AllCount | number:0}}</td>
+            <td><b>{{record.Summ | number:0}}</b></td>
+        </tr>
+    </table>
+</div>

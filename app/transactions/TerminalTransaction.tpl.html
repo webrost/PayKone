@@ -1,0 +1,103 @@
+﻿<div ng-controller="TerminalTransactionCtrl">    
+    <div class="well">
+        Текущий терминал: {{currentTerminal.Name}}
+    </div>
+    <div class="modalPanel" ng-show="ShowDialogCashFlow">
+        <div class="modalDialog">
+            <div class="well" style="max-height: 500px; overflow-y: scroll;">
+                <table class="table table-bordered table-condensed">
+                    <tr>
+                        <td><a href="" ng-click="predicate2 = 'CashInDate'; reverse2=false">Время приема</a></td>
+                        <td><a href="" ng-click="predicate2 = 'TransactionId'; reverse2=false">Код транзакции</a></td>
+                        <td><a href="" ng-click="predicate2 = 'Nominal'; reverse2=false">Купюра</a></td>
+                        <td><a href="" ng-click="predicate2 = 'CashType'; reverse2=false">Тип купюры</a></td>
+                        <td><a href="" ng-click="predicate2 = 'IsCollected'; reverse2=false">Время инкассации</a></td>
+                    </tr>
+                    <tr ng-repeat="cashFlow in cashFlows  | orderBy:predicate2:reverse2">
+                        <td>{{cashFlow.CashInDate | date:'dd.MM.yyyy HH:mm:ss'}} </td>
+                        <td>{{cashFlow.TransactionId}}</td>
+                        <td>{{cashFlow.Nominal}}</td>
+
+                        <td ng-if="cashFlow.CashType == 1">DepositUnit</td>
+                        <td ng-if="cashFlow.CashType == 2">SuspendUnit</td>
+                        <td ng-if="cashFlow.CashType == 0 || cashFlow.CashType == null">CashFlowUnit</td>
+                        <td>{{cashFlow.IsCollected | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+                    </tr>
+                </table>
+                <button class="btn btn-default" ng-click="ShowDialogCashFlow = false;">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <form class="form-inline" role="form">
+        <div class="form-group">                                          
+            <input type="text" class="form-control" placeholder="Терминал" ng-model="currentTerminal"
+                   typeahead="terminal as (terminal.Name + terminal.Address) for terminal in getTerminals($viewValue)" typeahead-on-select="CheckTerminalSelection()"
+                   typeahead-loading="loadingTerminals" class="form-control" select-on-click>
+            <i ng-show="loadingTerminals" class="glyphicon glyphicon-refresh"></i>
+        </div>
+        <div class="form-group">
+            c
+        </div>
+        <div class="form-group">
+            <input kendo-date-time-picker k-ng-model="startDate" data-k-format="'dd.MM.yyyy HH:mm'" />
+        </div>
+        <div class="form-group">
+            по
+        </div>
+        <div class="form-group">
+            <input kendo-date-time-picker k-ng-model="endDate" data-k-format="'dd.MM.yyyy HH:mm'" />
+        </div>
+        <button type="submit" ng-click="getTransaction()" class="btn btn-primary" ng-disabled="!EnableFilter">Фильтр</button>
+        <button type="submit" class="btn btn-default" ng-click="Print()" ng-disabled="checked.length == 0">Печать</button>
+        <select ng-model="transactionstatus" convert-to-number class="input-sm">
+            <option value="2">2-Успешная</option>
+            <option value="3">3-Отменена пользователем</option>
+            <option value="15">15-Ошибочная или тестовая. </option>
+        </select>
+        <button type="submit" class="btn btn-default" ng-click="ChangeTransactionStatus()" ng-disabled="checked.length == 0">Изменить статус транзакции</button>
+        <button type="submit" class="btn btn-default" ng-click="GetCashFlow()" ng-disabled="checked.length == 0">Купюры</button>
+    </form>
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <td></td>
+            <td><a href="" ng-click="predicate = 'Id'; reverse=false">Id</a></td>
+            <td><a href="" ng-click="predicate = 'Date'; reverse=!reverse">Дата</a></td>
+            <td><a href="" ng-click="predicate = 'Summ'; reverse=!reverse">Сумма</a></td>
+            <td><a href="" ng-click="predicate = 'SummCommission'; reverse=!reverse">Комиссия</a></td>
+            <td><a href="" ng-click="predicate = 'MaxSumm'; reverse=!reverse">Максимальная сумма</a></td>
+            <td><a href="" ng-click="predicate = 'SummInBill'; reverse=!reverse">Сумма счета</a></td>
+            <td><a href="" ng-click="predicate = 'Purpose'; reverse=!reverse">Назначение</a></td>
+            <td><a href="" ng-click="predicate = 'Status'; reverse=!reverse">Статус</a></td>
+            <td><a href="" ng-click="predicate = 'PayerIdentificator'; reverse=!reverse">Идентификатор плательщика</a></td>
+            <td><a href="" ng-click="predicate = 'ReestrRecordId'; reverse=!reverse">Запись в реестре</a></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td><b>Итого:</b></td>
+            <td><b>{{getTotal() | number:2}} грн.</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr ng-repeat="transaction in transactions | orderBy:predicate:reverse" ng-click="current.transaction = transaction"
+            ng-class="{selectedRow: current.transaction == transaction}" style="cursor: pointer;">
+            <td><input type="checkbox" id="cb_{{transaction.Id}}" ng-click="Check($event, transaction.Id)" /></td>
+            <td>{{transaction.Id}}</td>
+            <td>{{transaction.Date | date:"dd.MM.yyyy HH:mm"}}</td>
+            <td>{{transaction.Summ | number:2}} грн.</td>
+            <td>{{transaction.SummCommission| number:2}} грн.</td>
+            <td>{{transaction.MaxSumm| number:2}} грн.</td>
+            <td>{{transaction.SummInBill| number:2}} грн.</td>
+            <td>{{transaction.Purpose}}</td>
+            <td>{{transaction.Status}}</td>
+            <td>{{transaction.PayerIdentificator}}</td>
+            <td>{{transaction.ReestrRecordId}}</td>
+        </tr>
+    </table>
+</div>
